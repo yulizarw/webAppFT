@@ -78,6 +78,12 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    role: {
+      type:DataTypes.STRING,
+      validate:{
+        msg:'Role harus diisi'
+      }
+    },
     tanggalLahir: {
       type:DataTypes.DATE,
       validate:{

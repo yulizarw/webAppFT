@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class pembimbingInstansi extends Model {
+  class Admin extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,46 +13,42 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  pembimbingInstansi.init({
-    namaPembimbing: {
+  Admin.init({
+    namaAdmin: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Nama Pembimbing Instansi harus diisi'
+        notEmpty:{
+          msg:'Nama Admin Harus diisi'
+        }
       }
     },
-    email: {
+    emailAdmin: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Email Pembimbing Instansi harus diisi'
+        notEmpty:{
+          msg:'Email Admin Harus diisi'
+        }
       }
     },
     password: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Password harus diisi'
-      }
-    },
-    jabatan: {
-      type:DataTypes.STRING,
-      validate:{
-        msg:'Jabatan Pembimbing Instansi harus diisi'
+        notEmpty:{
+          msg:'Password Admin Harus diisi'
+        }
       }
     },
     role: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Role harus diisi'
+        notEmpty:{
+          msg:'Role Harus diisi'
+        }
       }
-    },
-    satuanKerja: {
-      type:DataTypes.STRING,
-      validate:{
-        msg:'Satuan Kerja Pembimbing Instansi harus diisi'
-      }
-    },
+    }
   }, {
     sequelize,
-    modelName: 'pembimbingInstansi',
+    modelName: 'Admin',
   });
-  return pembimbingInstansi;
+  return Admin;
 };

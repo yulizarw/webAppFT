@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
         msg:'Email Tenaga Kependidikan harus diisi'
       }
     },
+    role: {
+      type:DataTypes.STRING,
+      validate:{
+        msg:'Role harus diisi'
+      }
+    },
     password: {
       type:DataTypes.STRING,
       validate:{
