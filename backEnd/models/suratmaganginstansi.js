@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      suratMagangInstansi.belongsTo(models.formulirPersetujuan,{foreignKey:'formulirPersetujuanId'})
+      suratMagangInstansi.belongsTo(models.dikjar,{foreignKey:'dikjarId'})
+      suratMagangInstansi.hasOne(models.suratPersetujuanInstansi,{foreignKey:'suratMagangInstansiId'})
     }
   };
   suratMagangInstansi.init({

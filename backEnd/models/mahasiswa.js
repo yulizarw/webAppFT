@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcryptjs')
 module.exports = (sequelize, DataTypes) => {
   class Mahasiswa extends Model {
     /**
@@ -11,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Mahasiswa.hasMany(models.FormulirMagang,{foreignKey:'mahasiswaId'})
+      Mahasiswa.belongsTo(models.prodi,{foreignKey:'prodiId'})
     }
   };
   Mahasiswa.init({
@@ -141,6 +144,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
+    hooks:{
+      beforeCreate(user){
+        user.password=bcrypt.hashSync(user.password,10)
+      }
+    },
     sequelize,
     modelName: 'Mahasiswa',
   });

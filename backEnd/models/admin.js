@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcryptjs')
 module.exports = (sequelize, DataTypes) => {
   class Admin extends Model {
     /**
@@ -15,38 +16,43 @@ module.exports = (sequelize, DataTypes) => {
   };
   Admin.init({
     namaAdmin: {
-      type:DataTypes.STRING,
-      validate:{
-        notEmpty:{
-          msg:'Nama Admin Harus diisi'
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Nama Admin Harus diisi'
         }
       }
     },
     emailAdmin: {
-      type:DataTypes.STRING,
-      validate:{
-        notEmpty:{
-          msg:'Email Admin Harus diisi'
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Email Admin Harus diisi'
         }
       }
     },
     password: {
-      type:DataTypes.STRING,
-      validate:{
-        notEmpty:{
-          msg:'Password Admin Harus diisi'
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Password Admin Harus diisi'
         }
       }
     },
     role: {
-      type:DataTypes.STRING,
-      validate:{
-        notEmpty:{
-          msg:'Role Harus diisi'
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Role Harus diisi'
         }
       }
     }
   }, {
+    hooks: {
+      beforeCreate(user) {
+        user.password = bcrypt.hashSync(user.password, 10)
+      }
+    },
     sequelize,
     modelName: 'Admin',
   });
