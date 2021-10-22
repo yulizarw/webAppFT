@@ -2,6 +2,8 @@ const routes = require('express').Router()
 const adminController = require('../controllers/adminController')
 const {authentication} =require ("../middlewares/auth")
 
+
+// edit user saat password dia gk ke hash
 routes.post('/register', adminController.register)
 routes.post('/loginAdmin',adminController.login)
 
