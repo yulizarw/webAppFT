@@ -34,5 +34,41 @@ routes.post('/createPembimbingInstansi', adminController.createPembimbingInstans
 routes.put('/editPembimbingInstansi/:id', adminController.editPembimbingInstansi)
 routes.delete('/deletePembimbingInstansi/:id', adminController.deletePembimbingInstansi)
 
+routes.post('/createInstansi', adminController.createInstansi)
+routes.put('/editInstansi/:id', adminController.editInstansi)
+routes.delete('/deleteInstansi/:id', adminController.deleteInstansi)
+routes.get('/listInstansi',adminController.listInstansi)
+
+routes.post('/createProdi', adminController.createProdi)
+routes.put('/editProdi/:id', adminController.editProdi)
+routes.delete('/deleteProdi/:id', adminController.deleteProdi)
+routes.get('/listProdi', adminController.listProdi)
+
+
+//penomoran surat surat masih memakai id, belum menggunakan format UPN yang string
+routes.post('/createFormulirPersetujuan', adminController.createFormulirPersetujuan)
+routes.put('/editFormulirPersetujuan/:id', adminController.editFormulirPersetujuan)
+routes.delete('/deleteFormulirPersetujuan/:id', adminController.deleteFormulirPersetujuan)
+routes.get('/listFormulirPersetujuan', adminController.listFormulirPersetujuan)
+
+routes.post('/createFormulirMagang', adminController.createFormulirMagang)
+routes.put('/editFormulirMagang/:id', adminController.editFormulirMagang)
+routes.delete('/deleteFormulirMagang/:id', adminController.deleteFormulirMagang)
+routes.get('/listFormulirMagang', adminController.listFormulirMagang)
+
+routes.post('/createSuratMagang', adminController.createSuratMagang)
+routes.put('/editSuratMagang/:id', adminController.editSuratMagang)
+routes.delete('/deleteSuratMagang/:id', adminController.deleteSuratMagang)
+routes.get('/listSuratMagang', adminController.listSuratMagang)
+
+routes.post('/createSuratMagangInstansi', adminController.createSuratMagangInstansi)
+routes.put('/editSuratMagangInstansi/:id', adminController.editSuratMagangInstansi)
+routes.delete('/deleteSuratMagangInstansi/:id', adminController.deleteSuratMagangInstansi)
+routes.get('/listSuratMagangInstansi', adminController.listSuratMagangInstansi)
+
+routes.post('/createSuratPersetujuanInstansi', adminController.createSuratPersetujuanInstansi)
+routes.put('/editSuratPersetujuanInstansi/:id', adminController.editSuratPersetujuanInstansi)
+routes.delete('/deleteSuratPersetujuanInstansi/:id', adminController.deleteSuratPersetujuanInstansi)
+routes.get('/listSuratPersetujuanInstansi', adminController.listSuratPersetujuanInstansi)
 
 module.exports = routes

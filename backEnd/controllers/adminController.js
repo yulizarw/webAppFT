@@ -1,4 +1,4 @@
-const { Admin, kaprodi, dikjar, Mahasiswa, dosenPembimbing, pembimbingInstansi } = require("../models");
+const { Admin, kaprodi, dikjar, Mahasiswa, dosenPembimbing, pembimbingInstansi, instansi, prodi, formulirPersetujuan, FormulirMagang, suratKeputusanMagang, suratMagangInstansi, suratPersetujuanInstansi } = require("../models");
 const axios = require("axios");
 
 const bcrypt = require("bcryptjs");
@@ -658,4 +658,792 @@ module.exports = class adminController {
             res.status(500).json(error)
         }
     }
+
+    static async createInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    namaInstansi: req.body.namaInstansi,
+                    bidangBisnis: req.body.bidangBisnis,
+                    alamat: req.body.alamat,
+                }
+                let filterNama = params.namaInstansi
+
+                let filterInstansi = await instansi.findOne({ where: { namaInstansi: filterNama } })
+                if (!filterInstansi) {
+                    let addInstansi = await instansi.create(params)
+                    res.status(201).json(addInstansi)
+                } else {
+                    res.status(400).json(`Mitra ${params.namaInstansi} telah terdaftar`)
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                namaInstansi: req.body.namaInstansi,
+                bidangBisnis: req.body.bidangBisnis,
+                alamat: req.body.alamat,
+            }
+
+            let filterInstansi = await instansi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterInstansi) {
+                    let editInstansi = await instansi.update(params, { where: { id }, returning: true })
+
+                    if (editInstansi[0] == 0) {
+                        res.status(400).json('Mitra Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi detail Mitra')
+                    } else {
+                        res.status(200).json(`Mitra with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async deleteInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterInstansi = await instansi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterInstansi) {
+                    let deleteInstansi = await instansi.destroy({ where: { id } })
+                    if (deleteInstansi) {
+                        res.status(200).json(`Mitra dengan ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Mitra tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let instansiList = await instansi.findAll()
+
+                if (instansiList.length > 0) {
+                    res.status(200).json(instansiList)
+                } else if (instansiList.length <= 0) {
+                    res.status(404).json("Belum ada Program Studi Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async createProdi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    namaProdi: req.body.namaProdi,
+                    peminatan: req.body.peminatan,
+                   
+                }
+                let filterNama = params.namaProdi
+
+                let filterProdi = await prodi.findOne({ where: { namaProdi: filterNama } })
+                if (!filterProdi) {
+                    let addProdi = await prodi.create(params)
+                    res.status(201).json(addProdi)
+                } else {
+                    res.status(400).json(`Program Studi ${params.namaProdi} telah terdaftar`)
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editProdi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                namaProdi: req.body.namaProdi,
+                peminatan: req.body.peminatan,
+            }
+
+            let filterProdi = await prodi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterProdi) {
+                    let editProdi = await prodi.update(params, { where: { id }, returning: true })
+
+                    if (editProdi[0] == 0) {
+                        res.status(400).json('Program Studi Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi detail Program Studi')
+                    } else {
+                        res.status(200).json(`Program Studi with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async deleteProdi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterProdi = await prodi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterProdi) {
+                    let deleteProdi = await prodi.destroy({ where: { id } })
+                    if (deleteProdi) {
+                        res.status(200).json(`Program Studi dengan ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Program Studi tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listProdi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let prodiList = await prodi.findAll()
+
+                if (prodiList.length > 0) {
+                    res.status(200).json(prodiList)
+                } else if (prodiList.length <= 0) {
+                    res.status(404).json("Belum ada Program Studi Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async createFormulirPersetujuan(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    statusPengajuan: 'Pending',
+                    formulirMagangId: +req.body.formulirMagangId,
+                    kaprodiId: +req.body.kaprodiId,
+                    prodiId:+req.body.prodiId
+                }
+
+                let filterId = params.formulirMagangId
+               
+                let filterFormulir = await formulirPersetujuan.findOne({ where: { formulirMagangId: filterId }, attributes:{exclude:['prodiId']} })
+                
+                if (!filterFormulir) {
+                    let addFormulir = await formulirPersetujuan.create(params)
+                    res.status(201).json(addFormulir)
+                } else {
+                    res.status(400).json(`Formulir Persetujuan no ${params.formulirMagangId} masih dalam proses`)
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editFormulirPersetujuan(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                statusPengajuan: 'Pending',
+                formulirMagangId: +req.body.formulirMagangId,
+                kaprodiId: +req.body.kaprodiId,
+                prodiId:+req.body.prodiId
+            }
+
+            let filterId = +params.formulirMagangId
+
+            if (adminIsLogin) {
+                if (filterId) {
+                    let editFormulirPersetujuan = await formulirPersetujuan.update(params, { where: { id }, returning: true })
+
+                    if (editFormulirPersetujuan[0] == 0) {
+                        res.status(400).json('Formulir Persetujuan Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi Formulir Persetujuan')
+                    } else {
+                        res.status(200).json(`Formulir Persetujuan with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            // res.status(500).json(error)
+            console.log(error)
+        }
+    }
+
+    static async deleteFormulirPersetujuan(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterFormulirPersetujuan = await formulirPersetujuan.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterFormulirPersetujuan) {
+                    let deleteFormulirPersetujuan = await formulirPersetujuan.destroy({ where: { id } })
+                    if (deleteFormulirPersetujuan) {
+                        res.status(200).json(`Formulir Persetujuan dengan no ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Formulir Persetujuan tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listFormulirPersetujuan(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let formulirPersetujuanList = await formulirPersetujuan.findAll()
+
+                if (formulirPersetujuanList.length > 0) {
+                    res.status(200).json(formulirPersetujuanList)
+                } else if (formulirPersetujuanList.length <= 0) {
+                    res.status(404).json("Belum ada Formulir Persetujuan Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async createFormulirMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    namaPemohon: req.body.namaPemohon,
+                    nimPemohon: +req.body.nimPemohon,
+                    prodiPemohon: req.body.prodiPemohon,
+                    namaInstansi:req.body.namaInstansi,
+                    alamatInstansi:req.body.alamatInstansi,
+                    waktuPKL: req.body.waktuPKL,
+                    catatan: req.body.catatan,
+                    peminatanPemohon: req.body.peminatanPemohon,
+                    namaDosenPembimbing: req.body.namaDosenPembimbing,
+                    rekomendasiKaprodi: 'Pending',
+                    mahasiswaId: +req.body.mahasiswaId,
+                }
+
+                let filterNama = params.namaPemohon
+               
+                let filterFormulir = await FormulirMagang.findOne({ where: { namaPemohon: filterNama } })
+                
+                if (!filterFormulir) {
+                    let addFormulirMagang = await FormulirMagang.create(params)
+                    res.status(201).json(addFormulirMagang)
+                } else {
+                    res.status(400).json(`Formulir Magang no ${filterFormulir.id} masih dalam proses`)
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editFormulirMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                namaPemohon: req.body.namaPemohon,
+                nimPemohon: +req.body.nimPemohon,
+                prodiPemohon: req.body.prodiPemohon,
+                namaInstansi:req.body.namaInstansi,
+                alamatInstansi:req.body.alamatInstansi,
+                waktuPKL: req.body.waktuPKL,
+                catatan: req.body.catatan,
+                peminatanPemohon: req.body.peminatanPemohon,
+                namaDosenPembimbing: req.body.namaDosenPembimbing,
+                rekomendasiKaprodi: req.body.rekomendasiKaprodi,
+                mahasiswaId: +req.body.mahasiswaId,
+            }
+
+            let filterFormulirMagang = await FormulirMagang.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterFormulirMagang) {
+                    let editFormulirMagang = await FormulirMagang.update(params, { where: { id }, returning: true })
+
+                    if (editFormulirMagang[0] == 0) {
+                        res.status(400).json('Formulir Magang Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi Formulir Magang')
+                    } else {
+                        res.status(200).json(`Formulir Magang with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+           
+        }
+    }
+
+    static async deleteFormulirMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterFormulirMagang = await FormulirMagang.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterFormulirMagang) {
+                    let deleteFormulirMagang = await FormulirMagang.destroy({ where: { id } })
+                    if (deleteFormulirMagang) {
+                        res.status(200).json(`Formulir Magang dengan no ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Formulir Magang tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listFormulirMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let formulirMagangList = await FormulirMagang.findAll()
+
+                if (formulirMagangList.length > 0) {
+                    res.status(200).json(formulirMagangList)
+                } else if (formulirMagangList.length <= 0) {
+                    res.status(404).json("Belum ada Formulir Magang Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async createSuratMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    namaDekan: req.body.namaDekan,
+                    jabatanDekan: req.body.jabatanDekan,
+                    tanggalDisetujui: req.body.tanggalDisetujui,
+                    dikjarId: +req.body.dikjarId,
+                    pembimbingInstansiId: +req.body.pembimbingInstansiId,
+                    dosenPembimbingId: +req.body.dosenPembimbingId
+                }
+
+                // let filterNama = params.namaDekan
+               
+                // let filterSurat = await suratKeputusanMagang.findOne({ where: { namaPemohon: filterNama } })
+                
+                // if (!filterSurat) {
+                    let addSurat = await suratKeputusanMagang.create(params)
+                    res.status(201).json(addSurat)
+                // } else {
+                    // res.status(400).json(`Formulir Magang no ${filterSurat.id} masih dalam proses`)
+                }
+            // } else {
+                // res.status(401).json('Unauthorized Access')
+            // }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editSuratMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                namaDekan: req.body.namaDekan,
+                jabatanDekan: req.body.jabatanDekan,
+                tanggalDisetujui: req.body.tanggalDisetujui,
+                dikjarId: +req.body.dikjarId,
+                pembimbingInstansiId: +req.body.pembimbingInstansiId,
+                dosenPembimbingId: +req.body.dosenPembimbingId
+            }
+
+            let filterSurat = await suratKeputusanMagang.findOne({where:{id}})
+
+            if (adminIsLogin) {
+                if (filterSurat) {
+                    let editFormulirMagang = await suratKeputusanMagang.update(params, { where: { id }, returning: true })
+
+                    if (editFormulirMagang[0] == 0) {
+                        res.status(400).json('Formulir Magang Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi Formulir Magang')
+                    } else {
+                        res.status(200).json(`Surat Keputusan Magang with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            // res.status(500).json(error)
+            console.log(error)
+           
+        }
+    }
+
+    static async deleteSuratMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterSuratMagang = await suratKeputusanMagang.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterSuratMagang) {
+                    let deleteSuratMagang = await suratKeputusanMagang.destroy({ where: { id } })
+                    if (deleteSuratMagang) {
+                        res.status(200).json(`Surat Magang dengan no ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Surat Magang tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listSuratMagang(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let suratMagangList = await suratKeputusanMagang.findAll()
+
+                if (suratMagangList.length > 0) {
+                    res.status(200).json(suratMagangList)
+                } else if (suratMagangList.length <= 0) {
+                    res.status(404).json("Belum ada surat Magang Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async createSuratMagangInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    dasarHukum: req.body.dasarHukum,
+                    formulirPersetujuanId: +req.body.formulirPersetujuanId,
+                    dikjarId: +req.body.dikjarId,
+                }
+
+                // let filterNama = params.namaDekan
+               
+                // let filterSurat = await suratKeputusanMagang.findOne({ where: { namaPemohon: filterNama } })
+                
+                // if (!filterSurat) {
+                    let addSurat = await suratMagangInstansi.create(params)
+                    res.status(201).json(addSurat)
+                // } else {
+                    // res.status(400).json(`Formulir Magang no ${filterSurat.id} masih dalam proses`)
+                }
+            // } else {
+                // res.status(401).json('Unauthorized Access')
+            // }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editSuratMagangInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                dasarHukum: req.body.dasarHukum,
+                formulirPersetujuanId: +req.body.formulirPersetujuanId,
+                dikjarId: +req.body.dikjarId,
+            }
+
+            let filterSurat = await suratMagangInstansi.findOne({where:{id}})
+
+            if (adminIsLogin) {
+                if (filterSurat) {
+                    let editSuratMagang = await suratMagangInstansi.update(params, { where: { id }, returning: true })
+
+                    if (editSuratMagang[0] == 0) {
+                        res.status(400).json('Surat Magang Instansi Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi  Surat Magang Instansi')
+                    } else {
+                        res.status(200).json(`Surat Magang Instansi with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            // res.status(500).json(error)
+            console.log(error)
+           
+        }
+    }
+
+    static async deleteSuratMagangInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterSuratMagang = await suratMagangInstansi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterSuratMagang) {
+                    let deleteSuratMagang = await suratMagangInstansi.destroy({ where: { id } })
+                    if (deleteSuratMagang) {
+                        res.status(200).json(`Surat Magang Instansi dengan no ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Surat Magang Instansi tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listSuratMagangInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let suratMagangList = await suratMagangInstansi.findAll()
+
+                if (suratMagangList.length > 0) {
+                    res.status(200).json(suratMagangList)
+                } else if (suratMagangList.length <= 0) {
+                    res.status(404).json("Belum ada surat Magang Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+
+    static async createSuratPersetujuanInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let params = {
+                    statusPersetujuan: req.body.statusPersetujuan,
+                    suratMagangInstansiId: +req.body.suratMagangInstansiId,
+                    instansiId: +req.body.instansiId,
+                }
+
+                // let filterSurat = params.namaDekan
+               
+                // let filterSurat = await suratKeputusanMagang.findOne({ where: { namaPemohon: filterNama } })
+                
+                // if (!filterSurat) {
+                    let addSurat = await suratPersetujuanInstansi.create(params)
+                    res.status(201).json(addSurat)
+                // } else {
+                    // res.status(400).json(`Formulir Magang no ${filterSurat.id} masih dalam proses`)
+                }
+            // } else {
+                // res.status(401).json('Unauthorized Access')
+            // }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async editSuratPersetujuanInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let params = {
+                statusPersetujuan: req.body.statusPersetujuan,
+                suratMagangInstansiId: +req.body.suratMagangInstansiId,
+                instansiId: +req.body.instansiId,
+            }
+
+            let filterSurat = await suratPersetujuanInstansi.findOne({where:{id}})
+
+            if (adminIsLogin) {
+                if (filterSurat) {
+                    let editSuratMagang = await suratPersetujuanInstansi.update(params, { where: { id }, returning: true })
+
+                    if (editSuratMagang[0] == 0) {
+                        res.status(400).json('Surat Persetujuan Instansi Tidak Terdaftar')
+                    } else if (!params) {
+                        res.status(400).json('Silahkan isi  Surat Persetujuan Instansi')
+                    } else {
+                        res.status(200).json(`Surat Persetujuan Instansi with id ${id} has been updated`)
+                    }
+                } else {
+                    res.status(404).json('Edit Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+            // console.log(error)
+           
+        }
+    }
+
+    static async deleteSuratPersetujuanInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+            let id = req.params.id
+            let filterSuratMagang = await suratPersetujuanInstansi.findOne({ where: { id } })
+
+            if (adminIsLogin) {
+                if (filterSuratMagang) {
+                    let deleteSuratMagang = await suratPersetujuanInstansi.destroy({ where: { id } })
+                    if (deleteSuratMagang) {
+                        res.status(200).json(`Surat Persetujuan Instansi dengan no ${id} berhasil di hapus `)
+                    } else {
+                        res.status(400).json('Proses hapus Surat Persetujuan Instansi tidak berhasil')
+                    }
+                } else {
+                    res.status(404).json('Proses Hapus Tidak Berhasil')
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    static async listSuratPersetujuanInstansi(req, res) {
+        try {
+            let adminIsLogin = req.userLogin.id
+
+            if (adminIsLogin) {
+                let suratMagangList = await suratPersetujuanInstansi.findAll()
+
+                if (suratMagangList.length > 0) {
+                    res.status(200).json(suratMagangList)
+                } else if (suratMagangList.length <= 0) {
+                    res.status(404).json("Belum ada surat Magang Terdaftar")
+                }
+            } else {
+                res.status(401).json('Unauthorized Access')
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+
+
+
 }
