@@ -11,7 +11,7 @@ module.exports = {
       namaDosen: {
         type: Sequelize.STRING
       },
-      prodi: {
+      programStudi: {
         type: Sequelize.STRING
       },
       bidangKepakaran: {

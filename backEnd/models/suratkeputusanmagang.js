@@ -20,19 +20,25 @@ module.exports = (sequelize, DataTypes) => {
     namaDekan: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Nama Dekan harus diisi'
+        notEmpty:{
+          msg:'Nama Dekan harus diisi'
+        }
       }
     },
     jabatanDekan: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Jabatan harus diisi'
+        notEmpty:{
+          msg:'Jabatan harus diisi'
+        }
       }
     },
     tanggalDisetujui: {
       type:DataTypes.DATE,
       validate:{
-        msg:'Tanggal disetujui harus diisi'
+        notEmpty:{
+          msg:'Tanggal disetujui harus diisi'
+        }
       }
     }
   }, {

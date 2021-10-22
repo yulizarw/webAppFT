@@ -20,31 +20,40 @@ module.exports = (sequelize, DataTypes) => {
     namaKaprodi: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Nama Kaprodi harus diisi'
+        notEmpty:{
+          msg:"Nama Kaprodi harus diisi"
+        }
       }
     },
     emailKaprodi:{
       type:DataTypes.STRING,
       validate:{
-        msg:'Email Kaprodi harus diisi'
+        notEmpty:{
+          msg:"Email Kaprodi harus diisi"
+        }
       }
     },
     passwordKaprodi: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Password Kaprodi harus diisi'
+        notEmpty:{
+          msg:"Password Kaprodi harus diisi"
+        }
       }
     },
     role: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Role harus diisi'
+        notEmpty:{
+          msg:"Role harus diisi"
+        }
       }
     }
   }, {
     hooks:{
       beforeCreate(user){
-        user.password=bcrypt.hashSync(user.password,10)
+        user.password=bcrypt.hashSync(user.passwordKaprodi,10)
+
       }
     },
     sequelize,

@@ -14,7 +14,7 @@ module.exports = {
       nim: {
         type: Sequelize.DOUBLE
       },
-      prodi: {
+      programStudi: {
         type: Sequelize.STRING
       },
       jenisKelamin: {

@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     statusPersetujuan: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Status Persetujuan Instansi harus diisi'
+        notEmpty:{
+          msg:'Status Persetujuan Instansi harus diisi'
+        }
       }
     }
   }, {

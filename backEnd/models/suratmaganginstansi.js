@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     dasarHukum: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Harap isi dasar hukum'
+        notEmpty:{
+          msg:'Harap isi dasar hukum'
+        }
       }
     }
   }, {

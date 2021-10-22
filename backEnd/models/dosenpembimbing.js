@@ -20,43 +20,57 @@ module.exports = (sequelize, DataTypes) => {
     namaDosen: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Nama Dosen Pembimbing harus diisi'
+        notEmpty:{
+          msg:'Nama Dosen Pembimbing harus diisi'
+        }
       }
     },
-    prodi:{
+    programStudi:{
       type:DataTypes.STRING,
       validate:{
-        msg:'Program Studi harus diisi'
+        notEmpty:{
+          msg:'Program Studi harus diisi'
+        }
       }
     },
     bidangKepakaran: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Bidang Kepakaran harus diisi'
+        notEmpty:{
+          msg:'Bidang Kepakaran harus diisi'
+        }
       }
     },
     emailDospem: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Email dosen pembimbing harus diisi'
+        notEmpty:{
+          msg:'Email dosen pembimbing harus diisi'
+        }
       }
     },
     password: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Password harus diisi'
+        notEmpty:{
+          msg:'Password harus diisi'
+        }
       }
     },
     role: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Role harus diisi'
+        notEmpty:{
+          msg:'Role harus diisi'
+        }
       }
     },
     jabatanAkademik: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Jabatan Akademik harus diisi'
+        notEmpty:{
+          msg:'Jabatan Akademik harus diisi'
+        }
       }
     }
   }, {

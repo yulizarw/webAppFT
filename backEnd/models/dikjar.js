@@ -20,31 +20,42 @@ module.exports = (sequelize, DataTypes) => {
     namaDikjar: {
       type: DataTypes.STRING,
       validate: {
-        msg: 'Nama Tenaga Kependidikan harus diisi'
+        notEmpty:{
+          msg: 'Nama Tenaga Kependidikan harus diisi'
+        }
       }
     },
     satuanKerja: {
       type: DataTypes.STRING,
       validate: {
-        msg: 'Satuan Kerja Tenaga Kependidikan harus diisi'
+        notEmpty:{
+          msg: 'Satuan Kerja Tenaga Kependidikan harus diisi'
+        }
       }
     },
     emailDikjar: {
       type: DataTypes.STRING,
       validate: {
-        msg: 'Email Tenaga Kependidikan harus diisi'
+        notEmpty:{
+          msg: 'Email Tenaga Kependidikan harus diisi'
+        }
       }
     },
     role: {
       type: DataTypes.STRING,
       validate: {
-        msg: 'Role harus diisi'
+        notEmpty:{
+          msg: 'Role harus diisi'
+        }
       }
     },
     password: {
       type: DataTypes.STRING,
       validate: {
-        msg: 'Password harus diisi'
+        notEmpty:{
+          msg: 'Password harus diisi'
+
+        }
       }
     }
   }, {

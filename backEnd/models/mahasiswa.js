@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    prodi: {
+    programStudi: {
       type:DataTypes.STRING,
       validate:{
         notEmpty:{

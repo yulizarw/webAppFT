@@ -19,19 +19,25 @@ module.exports = (sequelize, DataTypes) => {
     namaInstansi: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Nama Instansi harus diisi'
+        notEmpty:{
+          msg:'Nama Instansi harus diisi'
+        }
       }
     },
     bidangBisnis: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Bidang Instansi harus diisi'
+        notEmpty:{
+          msg:'Bidang Instansi harus diisi'
+        }
       }
     },
     alamat: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Alamat Instansi harus diisi'
+        notEmpty:{
+          msg:'Alamat Instansi harus diisi'
+        }
       }
     }
   }, {

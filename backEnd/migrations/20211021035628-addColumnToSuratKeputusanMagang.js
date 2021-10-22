@@ -8,8 +8,8 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropColumn('suratKeputusanMagangs', 'dikjarId')
-    await queryInterface.dropColumn('suratKeputusanMagangs', 'pembimbingInstansiId')
-    await queryInterface.dropColumn('suratKeputusanMagangs', 'dosenPembimbingId')
+    await queryInterface.removeColumn('suratKeputusanMagangs', 'dikjarId')
+    await queryInterface.removeColumn('suratKeputusanMagangs', 'pembimbingInstansiId')
+    await queryInterface.removeColumn('suratKeputusanMagangs', 'dosenPembimbingId')
   }
 };
