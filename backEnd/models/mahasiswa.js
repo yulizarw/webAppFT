@@ -84,7 +84,9 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type:DataTypes.STRING,
       validate:{
-        msg:'Role harus diisi'
+        notEmpty:{
+          msg:'Role harus diisi'
+        }
       }
     },
     tanggalLahir: {
