@@ -4,10 +4,10 @@ const jwt = require("jsonwebtoken");
 const authentication = async (req, res, next) => {
     try {
         const { access_token } = req.headers;
-       
+
         if (access_token) {
             req.userLogin = jwt.verify(access_token, process.env.SECRET);
-           
+
             if (req.userLogin.role === "Admin") {
                 await Admin.findByPk(req.userLogin.id)
                     .then((admin) => {
@@ -42,22 +42,22 @@ const authentication = async (req, res, next) => {
                         }
                         next()
                     })
-            } else if (req.userLogin.role === "Pembimbing Instansi"){
+            } else if (req.userLogin.role === "Pembimbing Instansi") {
                 await pembimbingInstansi.findByPk(req.userLogin.id)
-                .then((instansiPembimbing)=>{
-                    if(!instansiPembimbing) {
-                        res.status(400).json("Wrong Auth")
-                    }
-                    next ()
-                })
-            } else if (req.userLogin.role === "Kaprodi"){
+                    .then((instansiPembimbing) => {
+                        if (!instansiPembimbing) {
+                            res.status(400).json("Wrong Auth")
+                        }
+                        next()
+                    })
+            } else if (req.userLogin.role === "Kaprodi") {
                 await kaprodi.findByPk(req.userLogin.id)
-                .then((ketuaProdi)=> {
-                    if(!ketuaProdi){
-                        res.status(400).json("Wrong Auth")
-                    }
-                    next ()
-                })
+                    .then((ketuaProdi) => {
+                        if (!ketuaProdi) {
+                            res.status(400).json("Wrong Auth")
+                        }
+                        next()
+                    })
             }
         } else {
             res.status(401).json("You are unauthorized to do this");

@@ -1,6 +1,7 @@
 const { Admin, kaprodi, dikjar, Mahasiswa, dosenPembimbing, pembimbingInstansi, instansi, prodi, formulirPersetujuan, FormulirMagang, suratKeputusanMagang, suratMagangInstansi, suratPersetujuanInstansi } = require("../models");
 const axios = require("axios");
 
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -9,8 +10,8 @@ module.exports = class adminController {
     static async register(req, res) {
         try {
             let params = {
-                namaAdmin: req.body.namaAdmin,
-                emailAdmin: req.body.emailAdmin,
+                namaAdmin: req.body.nama,
+                emailAdmin: req.body.email,
                 password: req.body.password,
                 role: req.body.role,
             }
@@ -212,7 +213,7 @@ module.exports = class adminController {
             let params = {
                 namaKaprodi: req.body.namaKaprodi,
                 emailKaprodi: req.body.emailKaprodi,
-                passwordKaprodi: req.body.passwordKaprodi,
+                passwordKaprodi: bcrypt.hashSync(req.body.password, 10),
                 role: req.body.role,
                 prodiId: +req.body.prodiId
             }
@@ -299,9 +300,9 @@ module.exports = class adminController {
             let adminIsLogin = req.userLogin.id
             let id = req.params.id
             let params = {
-                namaDikjar: req.body.namaDikjar,
-                emailDikjar: req.body.emailDikjar,
-                password: req.body.password,
+                namaDikjar: req.body.nama,
+                emailDikjar: req.body.email,
+                password: bcrypt.hashSync(req.body.password, 10),
                 role: req.body.role,
                 satuanKerja: req.body.satuanKerja
             }
@@ -401,10 +402,10 @@ module.exports = class adminController {
             let adminIsLogin = req.userLogin.id
             let id = req.params.id
             let params = {
-                namaMahasiswa: req.body.namaMahasiswa,
+                namaMahasiswa: req.body.nama,
                 nim: +req.body.nim,
                 email: req.body.email,
-                password: req.body.password,
+                password: bcrypt.hashSync(req.body.password, 10),
                 programStudi: req.body.programStudi,
                 jenisKelamin: req.body.jenisKelamin,
                 tahunAngkatan: +req.body.tahunAngkatan,
@@ -510,7 +511,7 @@ module.exports = class adminController {
                 programStudi: req.body.programStudi,
                 bidangKepakaran: req.body.bidangKepakaran,
                 emailDospem: req.body.emailDospem,
-                password: req.body.password,
+                password: bcrypt.hashSync(req.body.password, 10),
                 jabatanAkademik: req.body.jabatanAkademik,
                 role: req.body.role,
                 prodiId: +req.body.prodiId
@@ -603,7 +604,7 @@ module.exports = class adminController {
             let params = {
                 namaPembimbing: req.body.namaPembimbing,
                 email: req.body.email,
-                password: req.body.password,
+                password: bcrypt.hashSync(req.body.password, 10),
                 jabatan: req.body.jabatan,
                 satuanKerja:req.body.satuanKerja,
                 role: req.body.role,
@@ -905,7 +906,7 @@ module.exports = class adminController {
             let adminIsLogin = req.userLogin.id
             let id = req.params.id
             let params = {
-                statusPengajuan: 'Pending',
+                statusPengajuan: req.body.statusPengajuan,
                 formulirMagangId: +req.body.formulirMagangId,
                 kaprodiId: +req.body.kaprodiId,
                 prodiId:+req.body.prodiId
@@ -983,9 +984,9 @@ module.exports = class adminController {
 
     static async createFormulirMagang(req, res) {
         try {
-            let adminIsLogin = req.userLogin.id
-
-            if (adminIsLogin) {
+            let adminIsLogin = req.userLogin.role
+            
+            if (adminIsLogin === 'Admin') {
                 let params = {
                     namaPemohon: req.body.namaPemohon,
                     nimPemohon: +req.body.nimPemohon,
