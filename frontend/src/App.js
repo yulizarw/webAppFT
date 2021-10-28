@@ -11,11 +11,14 @@ import {
 // account page
 import { Login } from "./screen/login"
 // import { Home } from "./screen/home"
-// import {userRegister} from "./screen/userRegister"
+import {UserRegister} from "./screen/userRegister"
 
 //router guard
 import ProtectedRoute from "./helper/ProtectedRoute";
 import LoginProtectedRoute from "./helper/LoginProtectedRoute";
+
+//screen
+import {Home} from './screen/home'
 
 
 import { Provider, useSelector } from "react-redux";
@@ -34,14 +37,14 @@ function App() {
             <Login loginFunction={loginFunction} />
           </LoginProtectedRoute>
           <Route exact path ="/register">
-            <userRegister />
+            <UserRegister />
           </Route>
-          {/* <ProtectedRoute
+          <ProtectedRoute
             exact
             path="/home"
             authLogin={authLogin}
             component={Home}
-          /> */}
+          />
         </Switch>
       </Provider>
     </Router>
